@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  server:
+    image: drogonframework/drogon
+    command: /root/joseki_server/execute.sh
+    container_name: joseki_server
+    volumes:
+      - .:/root/joseki_server
+      - hoge:/root/joseki_server/build
+    ports:
+      - "49154:49154"
+    env_file:
+      - ./.env
+    networks:
+      - app-net
+    depends_on:
+      - db
+  db:
+    image: postgres
+    container_name: joseki_server_database
+    volumes:
+      - ./postgres/initdb:/docker-entrypoint-initdb.d
+      - dbdata:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    name: joseki_server_app_net
+    driver: bridge
+
+volumes:
+  dbdata: null
+  hoge:
