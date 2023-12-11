@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS version (
     name        text        not null default 'new version',
     created_at  timestamp   not null default current_timestamp
 );
+INSERT INTO version (name) values ('debug');
 INSERT INTO version (name) values ('beta_v1.0');
 INSERT INTO version (name) values ('beta_v1.1');
 INSERT INTO version (name) values ('beta_v1.2');
