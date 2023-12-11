@@ -18,7 +18,9 @@ void score::add( const HttpRequestPtr &req, std::function<void(const HttpRespons
                 ->execSqlAsyncFuture(sql, version_id, name, score);
 
         if(std::future_status::timeout == futureObject.wait_for(std::chrono::seconds(3))){
-            return;
+            Json::Value output;
+            output["state"] = "timeout";
+            callback(HttpResponse::newHttpJsonResponse(output));
         }
         else{
             Json::Value output;
@@ -48,24 +50,26 @@ void score::lanking( const HttpRequestPtr &req, std::function<void(const HttpRes
                 ->execSqlAsyncFuture(sql, version_id);
 
         if(std::future_status::timeout == futureObject.wait_for(std::chrono::seconds(3))){
-            return;
+            Json::Value output;
+            output["state"] = "timeout";
+            callback(HttpResponse::newHttpJsonResponse(output));
         }
         else{
             auto result = futureObject.get();
 
-            if(0 >= result.size()){
-                Json::Value output;
-                output["state"] = "error";
-                callback(HttpResponse::newHttpJsonResponse(output));
-            }
 
             Json::Value output;
             output["state"] = "ok";
-            for(int i = 0; i < result.size(); i++){
-                Json::Value ret;
-                ret["name"] = result[i]["name"].as<std::string>();
-                ret["score"] = result[i]["score"].as<int>();
-                output["lanking"][i] = ret;
+            if(0 >= result.size()){
+                output["lanking"] = Json::nullValue;
+            }
+            else{
+                for(int i = 0; i < result.size(); i++){
+                    Json::Value ret;
+                    ret["name"] = result[i]["name"].as<std::string>();
+                    ret["score"] = result[i]["score"].as<int>();
+                    output["lanking"][i] = ret;
+                }
             }
             callback(HttpResponse::newHttpJsonResponse(output));
         }
