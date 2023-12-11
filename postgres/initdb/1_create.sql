@@ -13,9 +13,3 @@ CREATE TABLE IF NOT EXISTS version (
 INSERT INTO version (name) values ('beta_v1.0');
 INSERT INTO version (name) values ('beta_v1.1');
 INSERT INTO version (name) values ('beta_v1.2');
-
-INSERT into score (version_id, name, score) values (3, 'hoge', 10);
-INSERT into score (version_id, name, score) values (1, 'fuga', 55);
-INSERT into score (version_id, name, score) values (2, 'piyo', 92);
-INSERT into score (version_id, name, score) values (3, 'foo', 24);
-INSERT into score (version_id, name, score) values (3, 'bar', 84);
