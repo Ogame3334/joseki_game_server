@@ -1,7 +1,16 @@
 #include "score.h"
+#include <cstdlib>
 
 // Add definition of your processing function here
 void score::add( const HttpRequestPtr &req, std::function<void(const HttpResponsePtr &)> &&callback) const {
+    auto pass = req->getHeader("pass");
+    auto server_pass = std::getenv("HEADER_PASS");
+    if(not (server_pass == pass)){
+        Json::Value output;
+        output["state"] = "error";
+        callback(HttpResponse::newHttpJsonResponse(output));
+    }
+    
     Json::Reader reader;
     Json::Value ret;
     
