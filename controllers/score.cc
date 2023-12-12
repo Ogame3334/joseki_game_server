@@ -20,6 +20,7 @@ void score::add( const HttpRequestPtr &req, std::function<void(const HttpRespons
     try{
         int version_id = ret["version_id"].asInt();
         std::string name = ret["name"].asString();
+        name = (name == "" or name == " " or name == "　") ? "名無しさん" : name;
         int score = ret["score"].asInt();
         auto futureObject = 
             drogon::app()
